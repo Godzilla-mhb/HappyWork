@@ -64,7 +64,7 @@
     "iconv-lite": "^0.5.0",
     "lodash-id": "^0.14.0",
     "lowdb": "^1.0.0",
-    "pdfjs-dist": "^2.3.200",
+    "pdfjs-dist": "^2.0.943",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "vue": "^2.5.16",

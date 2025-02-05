@@ -1,19 +1,25 @@
 <template>
   <el-container class="container">
     <div class="divx"></div>
-    <div class="setting" v-if="is_setting">
-      <el-input
-        placeholder="请选择本地PDF"
-        v-model="input"
-        class="input-with-select"
-        @keyup.enter.native="onSo"
-        size="mini"
-      >
-        <el-button slot="append" icon="el-icon-folder-opened" @click="onSelect"></el-button>
+    <div class="setting"
+         v-if="is_setting">
+      <el-input placeholder="请选择本地PDF"
+                v-model="input"
+                class="input-with-select"
+                @keyup.enter.native="onSo"
+                size="mini">
+        <el-button slot="append"
+                   icon="el-icon-folder-opened"
+                   @click="onSelect"></el-button>
       </el-input>
     </div>
-    <div v-loading="loading" v-if="pdfurl" class="center">
-      <canvas v-for="data in canvasData" :key="data" :id="'the-canvas-'+data" class="canvasstyle"></canvas>
+    <div v-loading="loading"
+         v-if="pdfurl"
+         class="center">
+      <canvas v-for="data in canvasData"
+              :key="data"
+              :id="'the-canvas-'+data"
+              class="canvasstyle"></canvas>
     </div>
   </el-container>
 </template>
@@ -28,7 +34,7 @@ import PDFJS from "pdfjs-dist";
 export default {
   name: "pdf",
   components: {},
-  data() {
+  data () {
     return {
       is_setting: true,
       input: "",
@@ -47,12 +53,12 @@ export default {
       loading: false
     };
   },
-  created() {
+  created () {
     this.onLoad();
     this.onKey();
   },
   methods: {
-    renderPage(num) {
+    renderPage (num) {
       // 渲染pdf
       const vm = this;
       this.pageRendering = true;
@@ -84,16 +90,17 @@ export default {
       });
       vm.page_num = vm.pageNum;
     },
-    makePDF(url) {
+    makePDF (url) {
       this.pdfurl = url;
       this.pdfjsView = true;
       this.showPDf();
     },
-    showPDf() {
+    showPDf () {
       const vm = this;
       this.loading = true;
       vm.canvasData = [];
       var data = fs.readFileSync(vm.pdfurl);
+      console.log(PDFJS)
       var typedarray = new Uint8Array(data);
       PDFJS.getDocument(typedarray)
         .then(pdfDoc_ => {
@@ -115,34 +122,34 @@ export default {
           vm.loading = false;
         });
     },
-    onLoad() {},
-    onSo() {
+    onLoad () { },
+    onSo () {
       this.makePDF(this.input);
       ipcRenderer.send("pdfOpacity", "change");
     },
-    onSelect() {
+    onSelect () {
       var that = this;
-      dialog.showOpenPdfFile(function(e) {
+      dialog.showOpenPdfFile(function (e) {
         that.input = e[0];
         that.makePDF(that.input);
         ipcRenderer.send("pdfOpacity", "change");
       });
     },
-    open() {
+    open () {
       if (this.is_setting) {
         this.is_setting = false;
       } else {
         this.is_setting = true;
       }
     },
-    onKey() {
+    onKey () {
       var that = this;
 
-      hotkeys.filter = function(event) {
+      hotkeys.filter = function (event) {
         return true;
       };
 
-      hotkeys("*", function(e) {
+      hotkeys("*", function (e) {
         if (e.key === "-") {
           ipcRenderer.send("pdfOpacity", "-");
         } else if (e.key === "+") {
